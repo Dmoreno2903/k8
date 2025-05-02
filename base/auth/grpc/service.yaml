@@ -1,0 +1,13 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: auth-grpc
+  namespace: default
+spec:
+  type: ClusterIP
+  selector:
+    app: auth-grpc
+  ports:
+    - name: auth-grpc
+      port: 50051
+      targetPort: 50051

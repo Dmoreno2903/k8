@@ -1,0 +1,176 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+resources:
+- ../../../base/originabot
+
+# Usar imágenes específicas en lugar de variables
+images:
+- name: originabot
+  newName: originabot
+  newTag: v1
+
+patches:
+- target:
+    kind: Deployment
+    name: originabot
+  patch: |
+    - op: replace
+      path: /spec/template/spec/volumes
+      value:
+        - name: code-vol
+          hostPath:
+            path: /Users/dmoreno/Documents/unergy/the-sun-factory/instances/origina-bot
+            type: DirectoryOrCreate
+        - name: static-vol
+          hostPath:
+            path: /Users/dmoreno/Documents/unergy/the-sun-factory/instances/static
+            type: DirectoryOrCreate
+        - name: media-vol
+          hostPath:
+            path: /Users/dmoreno/Documents/unergy/the-sun-factory/instances/media
+            type: DirectoryOrCreate
+        - name: logs-vol
+          hostPath:
+            path: /Users/dmoreno/Documents/unergy/the-sun-factory/instances/logs
+            type: DirectoryOrCreate
+            
+- target:
+    kind: Deployment
+    name: originabot
+  patch: |
+    - op: replace
+      path: /spec/template/spec/containers/0/volumeMounts
+      value:
+        - name: code-vol
+          mountPath: /home/app/originabot
+        - name: static-vol
+          mountPath: /home/app/static
+        - name: media-vol
+          mountPath: /home/app/media
+        - name: logs-vol
+          mountPath: /home/app/logs
+
+- target:
+    kind: Deployment
+    name: originabot
+  patch: |
+    - op: replace
+      path: /spec/template/spec/containers/0/workingDir
+      value: /home/app/originabot
+  
+- target:
+    kind: Deployment
+    name: originabot
+  patch: |
+    - op: replace
+      path: /spec/template/spec/containers/0/resources
+      value:
+        requests:
+          cpu: "500m"
+          memory: "2Gi"
+        limits:
+          cpu: "900m"
+          memory: "4Gi"
+
+- target:
+    kind: Deployment
+    name: originabot-celery
+  patch: |
+    - op: replace
+      path: /spec/template/spec/volumes
+      value:
+        - name: code-vol
+          hostPath:
+            path: /Users/dmoreno/Documents/unergy/the-sun-factory/instances/origina-bot
+            type: DirectoryOrCreate
+        - name: static-vol
+          hostPath:
+            path: /Users/dmoreno/Documents/unergy/the-sun-factory/instances/static
+            type: DirectoryOrCreate
+        - name: media-vol
+          hostPath:
+            path: /Users/dmoreno/Documents/unergy/the-sun-factory/instances/media
+            type: DirectoryOrCreate
+        - name: logs-vol
+          hostPath:
+            path: /Users/dmoreno/Documents/unergy/the-sun-factory/instances/logs
+            type: DirectoryOrCreate
+            
+- target:
+    kind: Deployment
+    name: originabot-celery
+  patch: |
+    - op: replace
+      path: /spec/template/spec/containers/0/volumeMounts
+      value:
+        - name: code-vol
+          mountPath: /home/app/originabot
+        - name: static-vol
+          mountPath: /home/app/static
+        - name: media-vol
+          mountPath: /home/app/media
+        - name: logs-vol
+          mountPath: /home/app/logs
+
+- target:
+    kind: Deployment
+    name: originabot-celery
+  patch: |
+    - op: replace
+      path: /spec/template/spec/containers/0/workingDir
+      value: /home/app/originabot
+
+- target:
+    kind: Deployment
+    name: originabot-celery-beat
+  patch: |
+    - op: replace
+      path: /spec/template/spec/volumes
+      value:
+        - name: code-vol
+          hostPath:
+            path: /Users/dmoreno/Documents/unergy/the-sun-factory/instances/origina-bot
+            type: DirectoryOrCreate
+        - name: static-vol
+          hostPath:
+            path: /Users/dmoreno/Documents/unergy/the-sun-factory/instances/static
+            type: DirectoryOrCreate
+        - name: media-vol
+          hostPath:
+            path: /Users/dmoreno/Documents/unergy/the-sun-factory/instances/media
+            type: DirectoryOrCreate
+        - name: logs-vol
+          hostPath:
+            path: /Users/dmoreno/Documents/unergy/the-sun-factory/instances/logs
+            type: DirectoryOrCreate
+            
+- target:
+    kind: Deployment
+    name: originabot-celery-beat
+  patch: |
+    - op: replace
+      path: /spec/template/spec/containers/0/volumeMounts
+      value:
+        - name: code-vol
+          mountPath: /home/app/originabot
+        - name: static-vol
+          mountPath: /home/app/static
+        - name: media-vol
+          mountPath: /home/app/media
+        - name: logs-vol
+          mountPath: /home/app/logs
+
+- target:
+    kind: Deployment
+    name: originabot-celery-beat
+  patch: |
+    - op: replace
+      path: /spec/template/spec/containers/0/workingDir
+      value: /home/app/originabot
+
+configMapGenerator:
+- name: originabot-config
+  behavior: create
+  envs:
+    - .env

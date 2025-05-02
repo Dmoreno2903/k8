@@ -1,0 +1,37 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: auth-celery
+  namespace: default
+  labels:
+    app: celery
+
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: auth-celery
+  template:
+    metadata:
+      labels:
+        app: auth-celery
+
+    spec:
+
+      containers:
+      - name: auth-celery
+        image: auth
+        imagePullPolicy: Never
+        command: ["celery", "-A", "auth", "worker", "--loglevel=info"]
+
+        resources:
+          requests:
+            cpu: "200m"
+            memory: "256Mi"
+          limits:
+            cpu: "400m"
+            memory: "512Mi"
+
+        envFrom:
+        - configMapRef:
+            name: auth-config

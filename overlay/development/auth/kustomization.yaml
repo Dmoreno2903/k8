@@ -1,0 +1,224 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+resources:
+- ../../../base/auth
+
+# Usar imágenes específicas en lugar de variables
+images:
+- name: auth
+  newName: auth
+  newTag: v1
+
+patches:
+- target:
+    kind: Deployment
+    name: auth
+  patch: |
+    - op: replace
+      path: /spec/template/spec/volumes
+      value:
+        - name: code-vol
+          hostPath:
+            path: /Users/dmoreno/Documents/unergy/the-sun-factory/instances/authentication-system
+            type: DirectoryOrCreate
+        - name: static-vol
+          hostPath:
+            path: /Users/dmoreno/Documents/unergy/the-sun-factory/instances/static
+            type: DirectoryOrCreate
+        - name: media-vol
+          hostPath:
+            path: /Users/dmoreno/Documents/unergy/the-sun-factory/instances/media
+            type: DirectoryOrCreate
+        - name: logs-vol
+          hostPath:
+            path: /Users/dmoreno/Documents/unergy/the-sun-factory/instances/logs
+            type: DirectoryOrCreate
+
+- target:
+    kind: Deployment
+    name: auth
+  patch: |
+    - op: replace
+      path: /spec/template/spec/containers/0/volumeMounts
+      value:
+        - name: code-vol
+          mountPath: /home/app
+        - name: static-vol
+          mountPath: /home/app/static
+        - name: media-vol
+          mountPath: /home/app/media
+        - name: logs-vol
+          mountPath: /home/app/logs
+
+- target:
+    kind: Deployment
+    name: auth
+  patch: |
+    - op: replace
+      path: /spec/template/spec/containers/0/workingDir
+      value: /home/app
+
+- target:
+    kind: Deployment
+    name: auth
+  patch: |
+    - op: replace
+      path: /spec/template/spec/containers/0/resources
+      value:
+        requests:
+          cpu: "500m"
+          memory: "2Gi"
+        limits:
+          cpu: "900m"
+          memory: "4Gi"
+
+- target:
+    kind: Deployment
+    name: auth-grpc
+  patch: |
+    - op: replace
+      path: /spec/template/spec/volumes
+      value:
+        - name: code-vol
+          hostPath:
+            path: /Users/dmoreno/Documents/unergy/the-sun-factory/instances/authentication-system
+            type: DirectoryOrCreate
+        - name: static-vol
+          hostPath:
+            path: /Users/dmoreno/Documents/unergy/the-sun-factory/instances/static
+            type: DirectoryOrCreate
+        - name: media-vol
+          hostPath:
+            path: /Users/dmoreno/Documents/unergy/the-sun-factory/instances/media
+            type: DirectoryOrCreate
+        - name: logs-vol
+          hostPath:
+            path: /Users/dmoreno/Documents/unergy/the-sun-factory/instances/logs
+            type: DirectoryOrCreate
+
+- target:
+    kind: Deployment
+    name: auth-grpc
+  patch: |
+    - op: replace
+      path: /spec/template/spec/containers/0/volumeMounts
+      value:
+        - name: code-vol
+          mountPath: /home/app
+        - name: static-vol
+          mountPath: /home/app/static
+        - name: media-vol
+          mountPath: /home/app/media
+        - name: logs-vol
+          mountPath: /home/app/logs
+
+- target:
+    kind: Deployment
+    name: auth-grpc
+  patch: |
+    - op: replace
+      path: /spec/template/spec/containers/0/workingDir
+      value: /home/app/buffer
+
+- target:
+    kind: Deployment
+    name: auth-celery
+  patch: |
+    - op: replace
+      path: /spec/template/spec/volumes
+      value:
+        - name: code-vol
+          hostPath:
+            path: /Users/dmoreno/Documents/unergy/the-sun-factory/instances/authentication-system
+            type: DirectoryOrCreate
+        - name: static-vol
+          hostPath:
+            path: /Users/dmoreno/Documents/unergy/the-sun-factory/instances/static
+            type: DirectoryOrCreate
+        - name: media-vol
+          hostPath:
+            path: /Users/dmoreno/Documents/unergy/the-sun-factory/instances/media
+            type: DirectoryOrCreate
+        - name: logs-vol
+          hostPath:
+            path: /Users/dmoreno/Documents/unergy/the-sun-factory/instances/logs
+            type: DirectoryOrCreate
+
+- target:
+    kind: Deployment
+    name: auth-celery
+  patch: |
+    - op: replace
+      path: /spec/template/spec/containers/0/volumeMounts
+      value:
+        - name: code-vol
+          mountPath: /home/app
+        - name: static-vol
+          mountPath: /home/app/static
+        - name: media-vol
+          mountPath: /home/app/media
+        - name: logs-vol
+          mountPath: /home/app/logs
+
+- target:
+    kind: Deployment
+    name: auth-celery
+  patch: |
+    - op: replace
+      path: /spec/template/spec/containers/0/workingDir
+      value: /home/app
+
+- target:
+    kind: Deployment
+    name: auth-celery-beat
+  patch: |
+    - op: replace
+      path: /spec/template/spec/volumes
+      value:
+        - name: code-vol
+          hostPath:
+            path: /Users/dmoreno/Documents/unergy/the-sun-factory/instances/authentication-system
+            type: DirectoryOrCreate
+        - name: static-vol
+          hostPath:
+            path: /Users/dmoreno/Documents/unergy/the-sun-factory/instances/static
+            type: DirectoryOrCreate
+        - name: media-vol
+          hostPath:
+            path: /Users/dmoreno/Documents/unergy/the-sun-factory/instances/media
+            type: DirectoryOrCreate
+        - name: logs-vol
+          hostPath:
+            path: /Users/dmoreno/Documents/unergy/the-sun-factory/instances/logs
+            type: DirectoryOrCreate
+
+- target:
+    kind: Deployment
+    name: auth-celery-beat
+  patch: |
+    - op: replace
+      path: /spec/template/spec/containers/0/volumeMounts
+      value:
+        - name: code-vol
+          mountPath: /home/app
+        - name: static-vol
+          mountPath: /home/app/static
+        - name: media-vol
+          mountPath: /home/app/media
+        - name: logs-vol
+          mountPath: /home/app/logs
+
+- target:
+    kind: Deployment
+    name: auth-celery-beat
+  patch: |
+    - op: replace
+      path: /spec/template/spec/containers/0/workingDir
+      value: /home/app
+
+configMapGenerator:
+- name: auth-config
+  behavior: create
+  envs:
+    - .env

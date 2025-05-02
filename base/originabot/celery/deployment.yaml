@@ -1,0 +1,38 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: originabot-celery
+  namespace: default
+  labels:
+    app: originabot-celery
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: originabot-celery
+  template:
+    metadata:
+      labels:
+        app: originabot-celery
+    
+    spec:
+
+      containers:
+      - name: originabot-celery
+        image: originabot
+        imagePullPolicy: Never
+        command: ["celery", "-A", "originabot", "worker"]
+
+        # Variables de entorno
+        envFrom:
+        - configMapRef:
+            name: originabot-config
+
+        # Recursos del contenedor
+        resources:
+          requests:
+            cpu: "500m"
+            memory: "1Gi"
+          limits:
+            cpu: "1000m"
+            memory: "2Gi"

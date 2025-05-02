@@ -1,0 +1,41 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: originabot
+  namespace: default
+  labels:
+    app: originabot
+
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: originabot
+  template:
+    metadata:
+      labels:
+        app: originabot
+
+    spec:
+      containers:
+      - name: originabot
+        image: originabot
+        imagePullPolicy: Never
+        command: [
+          "gunicorn", "originabot.wsgi:application", 
+          "--name", "originabot_gunicorn", 
+          "--workers", "$(WORKERS)",
+          "--timeout", "120", 
+          "--bind", "0.0.0.0:8000", 
+          "--forwarded-allow-ips", "*"
+        ]
+
+        #Puertos
+        ports:
+        - containerPort: 8000
+          name: http
+        
+        # Variables de entorno
+        envFrom:
+        - configMapRef:
+            name: originabot-config
